@@ -12,6 +12,10 @@
   },
   "keywords": [],
   "author": "",
+  "contributors": [
+    "Oscar Herrera",
+    ""
+  ],
   "license": "ISC",
   "type": "module",
   "bugs": {
