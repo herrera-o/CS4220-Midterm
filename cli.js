@@ -1,3 +1,4 @@
+import { handleHistory } from "./history.js";
 import { runSearch } from './app.js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
