@@ -1,43 +1,44 @@
-const fs = require("fs");
-const inquirer = require("inquirer")
+import fs from "fs";
+import inquirer from "inquirer";
+import { runSearch } from "./app.js";
 
-function getHistory(){
-    if (!fs.existsSync("serch_history.json")){
-        return [];
-    }
+function getHistory() {
+  if (!fs.existsSync("search_history.json")) {
+    return [];
+  }
 
-    const data = fs.readFilesSync("search_history.json");
-    return JSON.parse(data);
+  const data = fs.readFileSync("search_history.json", "utf8").trim();
+
+  if (!data) {
+    return [];
+  }
+
+  return JSON.parse(data);
 }
 
-async function handleHistory(){
-    const history = getHistory();
+export async function handleHistory() {
+  const history = getHistory();
 
-    if (history.length === 0){
-        console.log("No search history found.");
-        return;
-    }
+  if (history.length === 0) {
+    console.log("No search history found.");
+    return;
+  }
 
-    const choices = ["Exit", ... history];
+  const choices = ["Exit", ...history];
 
-    const answer = await inquirer.createPromptModule([
-        {
-            type: "list",
-            name: "keyword",
-            message: "Select a previous search:",
-            choices: choices
-        }
-    ]);
+  const answer = await inquirer.prompt([
+    {
+      type: "list",
+      name: "keyword",
+      message: "Select a previous search:",
+      choices: choices,
+    },
+  ]);
 
-    if (answer.keyword === "Exit"){
-        console.log("Goodbye!");
-        return;
-    }
+  if (answer.keyword === "Exit") {
+    console.log("Goodbye!");
+    return;
+  }
 
-    const app = require("./app");
-    await app.search(answer.keyword);
+  await runSearch(answer.keyword);
 }
-
-module.exports = {
-    handleHistory
-};
