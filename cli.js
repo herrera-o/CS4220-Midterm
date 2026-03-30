@@ -23,17 +23,23 @@ yargs(hideBin(process.argv))
     )
     // Define the "history" command with a required "keywords" argument
     .command(
-        'history <keywords...>', // Use "keywords..." to allow multiple keywords
-        'Search past by keywords',
+        'history [keywords...]',
+        'View search history by keywords',
         (yargs) => {
             yargs.positional('keywords', {
-                describe: 'Search by keywords',
+                describe: 'History type to view. Use: keywords',
                 type: 'string',
             });
         },
-       (yargs) => {
-    handleHistory();
-}
+        (yargs) => {
+            if (yargs.keywords === undefined) {
+                handleHistory();
+            } else if (yargs.keywords === 'keywords') {
+                //TODO function that takes keywords
+            } else {
+                console.log("Invalid arguyment.")
+            }
+        }
     )
     .help()
     .alias('h', 'help').argv;
