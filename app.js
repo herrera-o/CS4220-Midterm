@@ -5,6 +5,7 @@ import path from "path";
 import readline from "readline";
 import { fileURLToPath } from "url";
 import { searchByKeyword, getDetailedById } from "./api.js";
+import { select } from "@inquirer/prompts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -129,7 +130,7 @@ async function promptUserToSelect(results) {
   }
 }
 
-export function runHistorySearch(keywords) {
+export async function runHistorySearch(keywords) {
   const history = loadSearchHistory();
 
   if (history.length === 0) {
@@ -146,11 +147,20 @@ export function runHistorySearch(keywords) {
     return;
   }
 
-  console.log("\nMatching History Keywords:");
-  console.log("==========================");
-  filtered.forEach((item, index) => {
-    console.log(`${index + 1}. ${item}`);
+  const answer = await select({
+    message: "Select a keyword to search:",
+    choices: [
+      { name: "Exit", value: "Exit" },
+      ...filtered.map(keyword => ({ name: keyword, value: keyword })),
+    ],
   });
+
+  if (answer === "Exit") {
+    console.log("Goodbye!");
+    return;
+  }
+
+  await runSearch(answer);
 }
 
 export async function runSearch(keyword) {
