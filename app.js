@@ -129,6 +129,30 @@ async function promptUserToSelect(results) {
   }
 }
 
+export function runHistorySearch(keywords) {
+  const history = loadSearchHistory();
+
+  if (history.length === 0) {
+    console.log("No search history found.");
+    return;
+  }
+
+  const filtered = history.filter(item =>
+    keywords.some(keyword => item.toLowerCase().includes(keyword.toLowerCase()))
+  );
+
+  if (filtered.length === 0) {
+    console.log(`No history found matching: ${keywords.join(', ')}`);
+    return;
+  }
+
+  console.log("\nMatching History Keywords:");
+  console.log("==========================");
+  filtered.forEach((item, index) => {
+    console.log(`${index + 1}. ${item}`);
+  });
+}
+
 export async function runSearch(keyword) {
   try {
     if (!keyword || !keyword.trim()) {

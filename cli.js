@@ -1,5 +1,5 @@
 import { handleHistory } from "./history.js";
-import { runSearch } from './app.js';
+import { runSearch, runHistorySearch } from './app.js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -32,12 +32,10 @@ yargs(hideBin(process.argv))
             });
         },
         (yargs) => {
-            if (yargs.keywords === undefined) {
+            if (!yargs.keywords || yargs.keywords.length === 0) {
                 handleHistory();
-            } else if (yargs.keywords === 'keywords') {
-                //TODO function that takes keywords
             } else {
-                console.log("Invalid arguyment.")
+                runHistorySearch(yargs.keywords);
             }
         }
     )
