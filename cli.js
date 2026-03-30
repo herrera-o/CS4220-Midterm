@@ -1,3 +1,5 @@
+import { handleHistory } from "./history.js";
+import { runSearch } from './app.js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -16,7 +18,7 @@ yargs(hideBin(process.argv))
         },
         (yargs) => {
             //TODO call app.js search function
-            console.log(`Search by keyword: ${yargs.keyword}`);
+            runSearch(yargs.keyword);
         }
     )
     // Define the "history" command with a required "keywords" argument
@@ -29,10 +31,9 @@ yargs(hideBin(process.argv))
                 type: 'string',
             });
         },
-        (yargs) => {
-            // TODO call function in app.js to search history
-            console.log(`Searching history ${yargs.keywords}`);
-        }
+       (yargs) => {
+    handleHistory();
+}
     )
     .help()
     .alias('h', 'help').argv;
