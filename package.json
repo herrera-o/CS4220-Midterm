@@ -1,10 +1,11 @@
 {
   "name": "cs4220-midterm",
   "version": "1.0.0",
-  "description": "",
-  "main": "cli.js",
+  "description": "Final group project",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,12 @@
   },
   "homepage": "https://github.com/herrera-o/CS4220-Midterm#readme",
 "dependencies": {
-  "@inquirer/prompts": "^8.3.2",
-  "axios": "^1.14.0",
-  "inquirer": "^13.3.2",
-  "yargs": "^18.0.0"
-}
+  "axios": "^1.16.0",
+  "dotenv": "^17.4.2",
+  "express": "^5.2.1",
+  "mongodb": "^7.2.0"
+},
+"devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
