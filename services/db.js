@@ -80,4 +80,7 @@ const mongo = () => {
     };
 };
 
+export let getDB = () => { throw new Error('DB not initialized'); };
+export const setDB = (db) => { getDB = () => db; };
+
 export default mongo();
