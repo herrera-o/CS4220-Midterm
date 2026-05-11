@@ -1,44 +1,40 @@
-import fs from "fs";
-import { select } from "@inquirer/prompts";
-import { runSearch } from "./app.js";
+import express from "express";
+import { getDB } from "../services/db.js";
 
-function getHistory() {
-  if (!fs.existsSync("search_history.json")) {
-    return [];
+const router = express.Router();
+
+router.get("/", async (req, res) => {
+  try {
+    const { type } = req.query;
+
+    if (!type) {
+      return res.status(400).json({
+        error: "type query parameter is required",
+      });
+    }
+
+    if (type !== "keywords") {
+      return res.status(400).json({
+        error: "type must be keywords",
+      });
+    }
+
+    const db = getDB();
+
+    const collection = db.collection("SearchHistoryKeyword");
+
+    const keywords = await collection
+      .find({}, { projection: { _id: 0 } })
+      .toArray();
+
+    res.json(keywords);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Internal server error",
+    });
   }
+});
 
-  const data = fs.readFileSync("search_history.json", "utf8").trim();
-
-  if (!data) {
-    return [];
-  }
-
-  return JSON.parse(data);
-}
-
-export async function handleHistory() {
-  const history = getHistory();
-
-  if (history.length === 0) {
-    console.log("No search history found.");
-    return;
-  }
-
-  const answer = await select({
-    message: "Select a previous search:",
-    choices: [
-      { name: "Exit", value: "Exit" },
-      ...history.map((keyword) => ({
-        name: keyword,
-        value: keyword,
-      })),
-    ],
-  });
-
-  if (answer === "Exit") {
-    console.log("Goodbye!");
-    return;
-  }
-
-  await runSearch(answer);
-}
+export default router;
